@@ -1,0 +1,38 @@
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.http.HttpResponse.BodyHandlers;
+import java.util.List;
+import java.util.Map;
+
+public class App {
+    public static void main(String[] args) throws Exception {
+       //Faz uma conexão http dos 250 filmes do IMDB
+        String url = "https://api.mocki.io/v2/549a5d8b/Top250Movies"; // var endereço=String
+        URI endereco = URI.create(url); //var de endereço como url
+        HttpClient client = HttpClient.newHttpClient(); //var de Cliet
+        HttpRequest request = HttpRequest.newBuilder(endereco).GET().build(); //var de requerimento
+        HttpResponse<String> response = client.send(request, BodyHandlers.ofString()); // forma de leitura do requerimento
+        String body = response.body(); //String de texto
+
+        //Busca de dados
+        JsonParser parser = new JsonParser();
+        List<Map<String, String>> listaDeFilmes = parser.parse(body);
+        
+        //exibir dados
+
+        for (Map<String,String> filme : listaDeFilmes) {
+            
+            System.out.println("Título:" + filme.get("title"));
+            System.out.println("Poster:" + filme.get("image"));
+
+            System.out.println("Rating:" + filme.get("imDbRating"));
+            System.out.println("\uD83D");
+
+            System.out.println();
+            
+       }
+
+    }
+}
