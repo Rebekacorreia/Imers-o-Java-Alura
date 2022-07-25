@@ -1,0 +1,39 @@
+import java.io.InputStream;
+import java.net.URL;
+import java.util.List;
+//import java.util.Map;
+
+public class App {
+    public static void main(String[] args) throws Exception {
+       //Faz uma conexão http dos 250 filmes do IMDB
+        String url = "https://raw.githubusercontent.com/alura-cursos/imersao-java/api/NASA-APOD.json";
+        
+        var http = new ClienteHttp();
+        String json = http.buscaDados(url);
+
+        //Busca de dados
+        //JsonParser parser = new JsonParser();
+        //List<Map<String, String>> listaDeConteudos = parser.parse(json);
+        
+        //exibir dados
+        ExtratorDaNasa extrator = new ExtratorDaNasa();
+        List<Conteudo> conteudos = extrator.extraiConteudos(json);
+
+        var geradora = new GeraFigurinhas();
+
+        for (int i = 0; i < 3; i++) {
+
+            Conteudo conteudo = conteudos.get(i);
+
+            InputStream inputStream = new URL(conteudo.getUrlImagem()).openStream();
+            String nomeArquivo = "saida/" + conteudo.getTitle() + ".png";
+
+            geradora.gerar(inputStream, nomeArquivo);
+
+            System.out.println(conteudo.getTitle());
+            System.out.println();
+            
+       }
+
+    }
+}
