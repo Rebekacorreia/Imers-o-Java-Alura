@@ -1,0 +1,42 @@
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+
+import javax.imageio.ImageIO;
+
+public class GeraFigurinhas {     
+    
+    public void gerar(InputStream inputStream, String nomeArquivo) throws IOException{
+
+        //ler imagem
+        //InputStream inputStream = new FileInputStream("entrada/filme_1.jpg"); //fluxo de entrada de um arquivo
+        //InputStream inputStream = new URL("https://imersao-java-apis.s3.amazonaws.com/TopMovies_1.jpg").openStream(); //pega a imagem diretamente do site
+        BufferedImage imgOriginal = ImageIO.read(inputStream);
+
+        //nova img em memória com tranparência e com tamanho novo
+        int largura = imgOriginal.getWidth();
+        int altura = imgOriginal.getHeight();
+        int novaAltura = altura + 200;
+        BufferedImage novaImagem = new BufferedImage(largura, novaAltura, BufferedImage.TRANSLUCENT);
+        
+        //copiar a imagem original em memória para nova imagem
+        Graphics2D graphics =(Graphics2D) novaImagem.getGraphics();
+        graphics.drawImage(imgOriginal, 0, 0, null);
+
+        //configuar a fonte
+        var fonte = new Font(Font.SANS_SERIF, Font.BOLD, 64);
+        graphics.setColor(Color.YELLOW);
+        graphics.setFont(fonte);
+
+        //escrever frase na nova imagem
+        graphics.drawString("FILMAÇO MEEO", 200, novaAltura - 100);
+
+        //escrever nova imagem em um arquivo
+        ImageIO.write(novaImagem, "png", new File(nomeArquivo));
+
+    }
+}
